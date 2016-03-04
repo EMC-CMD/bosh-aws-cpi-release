@@ -150,7 +150,7 @@ resources:
   - name: bosh-cpi-src-in
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/bosh-aws-cpi-release.git
+      uri: https://github.com/emc-cmd/bosh-aws-cpi-release.git
       branch: master
       ignore_paths:
         - .final_builds/**/*.yml

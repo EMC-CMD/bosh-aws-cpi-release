@@ -168,8 +168,8 @@ resources:
   - name: bats
     type: git
     source:
-      uri: https://github.com/cloudfoundry/bosh-acceptance-tests.git
-      branch: master
+      uri: https://github.com/EMC-CMD/bosh-acceptance-tests.git
+      branch: PR-BOSHSSH
 
   - name: bosh-release
     type: bosh-io-release

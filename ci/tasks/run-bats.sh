@@ -86,4 +86,4 @@ EOF
 cd bats
 ./write_gemfile
 bundle install
-bundle exec rspec ./spec/system/raw_ephemeral_disk_spec.rb:28 ./spec/system/with_release_stemcell_spec.rb:101
+bundle exec rspec ./spec/system/with_release_stemcell_spec.rb:101

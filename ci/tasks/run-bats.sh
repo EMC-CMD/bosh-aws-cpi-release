@@ -10,6 +10,7 @@ check_param base_os
 check_param BAT_STEMCELL_NAME
 check_param BAT_VCAP_PASSWORD
 check_param public_key_name
+check_param private_key_data
 check_param region_name
 check_param stack_name
 
@@ -38,7 +39,10 @@ BAT_NETWORK_STATIC_IP=$(get_stack_info_of "${stack_info}" "${stack_prefix}Static
 BAT_SECOND_STATIC_IP=$(get_stack_info_of "${stack_info}" "${stack_prefix}StaticIP2")
 
 eval $(ssh-agent)
-private_key=${PWD}/deployment/private_key.pem
+private_key=${PWD}/private_key.pem
+echo "${private_key_data}" > ${private_key}
+chmod go-r ${private_key}
+eval $(ssh-agent)
 ssh-add ${private_key}
 
 export BAT_DIRECTOR=$DIRECTOR

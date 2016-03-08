@@ -37,11 +37,12 @@ jobs:
     serial_groups: [bats-ubuntu]
     plan:
       - aggregate:
-        - {trigger: true,                                                   get: bosh-cpi-release, resource: bosh-cpi-dev-artifacts}
-        - {trigger: false,     passed: [recreate-infrastructure-primary],   get: bosh-cpi-src,     resource: bosh-cpi-src-in}
+        - {trigger: false,                                                  get: bosh-cpi-release, resource: bosh-cpi-dev-artifacts}
+        - {trigger: false,                                                  get: bosh-cpi-src,     resource: bosh-cpi-src-in}
         - {trigger: false,                                                  get: bosh-init}
         - {trigger: false,                                                  get: bosh-release}
-        - {trigger: false,                                                  get: stemcell, resource: aws-ubuntu-hvm-stemcell}
+        - {trigger: false,                                                  get: stemcell,         resource: aws-ubuntu-hvm-stemcell}
+
       - task: setup-director
         file: bosh-cpi-src/ci/tasks/setup-director.yml
         config:
@@ -62,12 +63,12 @@ jobs:
     serial_groups: [bats-ubuntu]
     plan:
       - aggregate:
-        - {trigger: true,                              get: bosh-cpi-release, resource: bosh-cpi-dev-artifacts}
-        - {trigger: false,                             get: stemcell, resource: aws-ubuntu-hvm-stemcell}
-        - {trigger: false,         passed: [bats-ubuntu-setup-director],                    get: bosh-cpi-src, resource: bosh-cpi-src-in}
-        - {trigger: false,                             get: bats}
-        - {trigger: false,                             get: bosh-release}
-        - {trigger: false,                             get: bosh-init}
+        - {trigger: false,                                               get: bosh-cpi-release,    resource: bosh-cpi-dev-artifacts}
+        - {trigger: false,                                               get: stemcell,            resource: aws-ubuntu-hvm-stemcell}
+        - {trigger: false,       passed: [bats-ubuntu-setup-director],   get: bosh-cpi-src,        resource: bosh-cpi-src-in}
+        - {trigger: false,                                               get: bats}
+        - {trigger: false,                                               get: bosh-release}
+        - {trigger: false,                                               get: bosh-init}
 
       - task: run-bats
         file: bosh-cpi-src/ci/tasks/run-bats.yml
@@ -81,6 +82,7 @@ jobs:
             public_key_name:       {{bosh_public_key_name}}
             region_name:           {{aws_region__primary}}
             stack_name:            primary
+            private_key_data:      {{bosh_private_key}}
 
       - task: teardown-director
         file: bosh-cpi-src/ci/tasks/teardown-director.yml
@@ -89,11 +91,11 @@ jobs:
     serial_groups: [bats-centos]
     plan:
       - aggregate:
-        - {trigger: true,                              get: bosh-cpi-release, resource: bosh-cpi-dev-artifacts}
-        - {trigger: false,     passed: [recreate-infrastructure-primary],                        get: bosh-cpi-src, resource: bosh-cpi-src-in}
-        - {trigger: false,                             get: bosh-init}
-        - {trigger: false,                             get: bosh-release}
-        - {trigger: false,                             get: stemcell, resource: aws-centos-hvm-stemcell}
+        - {trigger: true,                                                     get: bosh-cpi-release, resource: bosh-cpi-dev-artifacts}
+        - {trigger: false,                                                    get: bosh-cpi-src,     resource: bosh-cpi-src-in}
+        - {trigger: false,                                                    get: bosh-init}
+        - {trigger: false,                                                    get: bosh-release}
+        - {trigger: false,                                                    get: stemcell,         resource: aws-centos-hvm-stemcell}
       - task: setup-director
         file: bosh-cpi-src/ci/tasks/setup-director.yml
         config:
@@ -132,6 +134,7 @@ jobs:
             BAT_VCAP_PASSWORD:     {{BAT_VCAP_PASSWORD}}
             public_key_name:       {{bosh_public_key_name}}
             region_name:           {{aws_region__primary}}
+            private_key_data:      {{bosh_private_key}}
             stack_name:            primary
 
       - task: teardown-director
@@ -141,7 +144,7 @@ resources:
   - name: bosh-cpi-dev-artifacts
     type: s3
     source:
-      regexp: bosh-aws-cpi\.tgz
+      regexp: bosh-aws-cpi-(44).tgz
       bucket: {{aws_s3_bucket}}
       region_name: {{aws_region__primary}}
       access_key_id: {{aws_access_key__primary}}
